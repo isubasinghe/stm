@@ -32,9 +32,10 @@ transfer aliceVar bobVar = do
   _ <- atomically $ do
       let amt = 40
       aliceOrig <- readTVar aliceVar
-      if aliceOrig >= amt
-        then pure ()
-        else pure ()
+      check $ aliceOrig >= amt
+      -- if aliceOrig >= amt
+        -- then pure ()
+        -- else retry
 
       writeTVar aliceVar $ aliceOrig - amt
       bobOrig <- readTVar bobVar
