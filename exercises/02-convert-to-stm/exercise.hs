@@ -6,11 +6,13 @@ main :: IO ()
 main = do
   -- You'll need to change some function names, and add in some calls to
   -- atomically
+  myA <- atomically $ do
+      var <- newTVar "Hello"
 
-  var <- newTVar "Hello"
+      origVal <- readTVar var
+      writeTVar var (origVal ++ " World")
 
-  origVal <- readTVar var
-  writeIORef var (origVal ++ " World")
-
-  newVal <- readIORef var
-  putStrLn newVal
+      newVal <- readTVar var
+      return newVal
+   
+  putStrLn myA
