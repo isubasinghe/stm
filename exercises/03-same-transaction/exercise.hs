@@ -9,12 +9,12 @@ sendMoney
   :: TVar Int -- ^ from account
   -> TVar Int -- ^ to account
   -> IO ()
-sendMoney from to = do
+sendMoney from to = atomically $ do
   let amount = 5
-  fromOrig <- atomically $ readTVar from
-  toOrig <- atomically $ readTVar to
-  atomically $ writeTVar from $ fromOrig - amount
-  atomically $ writeTVar to $ toOrig + amount
+  fromOrig <- readTVar from
+  toOrig <- readTVar to
+  writeTVar from $ fromOrig - amount
+  writeTVar to $ toOrig + amount
 
 main :: IO ()
 main = hspec $ it "no data races" $ do
